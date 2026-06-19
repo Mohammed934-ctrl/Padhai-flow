@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Cap base -->
+  <polygon points="50,20 95,42 50,64 5,42" fill="#22c55e"/>
+  <!-- Cap top shadow -->
+  <polygon points="50,20 95,42 50,52 5,42" fill="#16a34a"/>
+  <!-- Board -->
+  <rect x="68" y="42" width="5" height="22" fill="#16a34a" rx="2"/>
+  <!-- Tassel ball -->
+  <circle cx="70.5" cy="66" r="5" fill="#22c55e"/>
+  <!-- Tassel line -->
+  <line x1="70.5" y1="71" x2="70.5" y2="80" stroke="#22c55e" stroke-width="2"/>
+</svg>
