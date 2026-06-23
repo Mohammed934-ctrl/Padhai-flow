@@ -117,7 +117,7 @@ export const VerifyOtp = async (req: Request, res: Response) => {
       { expiresIn: "7d" },
     );
 
-    return res.status(400).json({
+    return res.status(200).json({
       message: "Email Verified Successfully",
       token,
       user: {
@@ -156,6 +156,10 @@ export const Login = async (req: Request, res: Response) => {
       password,
       existingUser.password,
     );
+  
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "please enter valid password " });
+    }
 
     const token = jwt.sign(
       { userId: existingUser._id },
@@ -173,9 +177,6 @@ export const Login = async (req: Request, res: Response) => {
       },
     });
 
-    if (!isPasswordValid) {
-      return res.status(400).json({ message: "please enter valid password " });
-    }
   } catch (error) {
     return res.status(500).json({
       message: "Failed to Login  ",
