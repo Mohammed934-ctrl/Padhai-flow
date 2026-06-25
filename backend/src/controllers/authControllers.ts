@@ -82,7 +82,7 @@ export const VerifyOtp = async (req: Request, res: Response) => {
   try {
     const { email, otp } = await req.body;
     if (!email || !otp) {
-      return res.status(400).json({ message: "Email and otp are reuired" });
+      return res.status(400).json({ message: "Email and otp are required" });
     }
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
@@ -93,7 +93,7 @@ export const VerifyOtp = async (req: Request, res: Response) => {
     if (existingUser.isVerified) {
       return res
         .status(400)
-        .json({ message: "Email already verfified.please login first" });
+        .json({ message: "Email already verfified.please login " });
     }
     const StoreOtp = await redis.get(`otp:${email}`);
     if (!StoreOtp) {
