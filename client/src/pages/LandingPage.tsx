@@ -12,12 +12,13 @@ import {
   GraduationCap,
   Clock,
   CheckCircle2,
- 
 } from "lucide-react";
 import { SiGithub, SiX } from "@icons-pack/react-simple-icons";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LandingPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { token } = useAuth();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -158,24 +159,46 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <GraduationCap className="w-6 h-6 text-primary" />
-            <span className="font-semibold text-lg tracking-tight">PadhaiFlow</span>
+            <span className="font-semibold text-lg tracking-tight">
+              PadhaiFlow
+            </span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-            <a href="#how-it-works" className="hover:text-foreground transition-colors">How it works</a>
+            <a
+              href="#features"
+              className="hover:text-foreground transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#how-it-works"
+              className="hover:text-foreground transition-colors"
+            >
+              How it works
+            </a>
           </div>
           <div className="flex items-center gap-3">
-            <Link to="/login">
-              <Button variant="ghost" size="sm">Log in</Button>
-            </Link>
-            <Link to="/register">
-              <Button size="sm">Get started</Button>
-            </Link>
+            {token ? (
+              <Link to="/dashboard">
+                <Button size="sm">Dashboard</Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="ghost" size="sm">
+                    Log in
+                  </Button>
+                </Link>
+
+                <Link to="/register">
+                  <Button size="sm">Get started</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -206,8 +229,7 @@ export default function LandingPage() {
           </Badge>
 
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.08]">
-            Study smarter,{" "}
-            <span className="text-primary">not harder</span>
+            Study smarter, <span className="text-primary">not harder</span>
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -217,9 +239,9 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/register">
+            <Link to={token ? "/dashboard" : "/register"}>
               <Button size="lg" className="gap-2 px-8 text-base h-12">
-                Start planning for free
+                {token ? "Go to Dashboard" : "Start planning for free"}
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
@@ -241,7 +263,7 @@ export default function LandingPage() {
                   <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
                   {t}
                 </span>
-              )
+              ),
             )}
           </div>
         </div>
@@ -272,14 +294,19 @@ export default function LandingPage() {
                   {f.icon}
                 </div>
                 <h3 className="font-semibold mb-2">{f.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {f.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="how-it-works" className="py-28 px-6 border-t border-border/40">
+      <section
+        id="how-it-works"
+        className="py-28 px-6 border-t border-border/40"
+      >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-primary text-sm font-medium uppercase tracking-widest mb-3">
@@ -305,7 +332,9 @@ export default function LandingPage() {
                     {s.number}
                   </span>
                   <h3 className="font-semibold mb-2">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {s.desc}
+                  </p>
                 </div>
               </div>
             ))}
@@ -323,9 +352,9 @@ export default function LandingPage() {
             Join students who stopped winging their exam prep and started
             actually planning it.
           </p>
-          <Link to="/register">
+          <Link to={token ? "/dashboard" : "/register"}>
             <Button size="lg" className="gap-2 px-10 h-12 text-base">
-              Create your free plan
+              {token ? "Go to Dashboard" : "Create your free plan"}
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
@@ -339,7 +368,8 @@ export default function LandingPage() {
             <span className="font-semibold">PadhaiFlow</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} PadhaiFlow. Built for students, by students.
+            © {new Date().getFullYear()} PadhaiFlow. Built for students, by
+            students.
           </p>
           <div className="flex items-center gap-4 text-muted-foreground">
             <a

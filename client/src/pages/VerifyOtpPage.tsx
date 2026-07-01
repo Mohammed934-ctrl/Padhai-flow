@@ -5,13 +5,11 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { maskEmail } from "@/utils/maskemail";
-
+import { useAuth } from "@/context/AuthContext";
 const VerifyOtpPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email;
-  console.log("Email is ::", email);
-
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
@@ -19,6 +17,8 @@ const VerifyOtpPage = () => {
   const [resendMessage, setResendMessage] = useState("");
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+const { login } = useAuth();
 
   useEffect(() => {
     if (!email) {
@@ -73,8 +73,9 @@ const VerifyOtpPage = () => {
     }
     setIsVerifying(true);
     try {
-      await axiosInstance.post("/auth/verify-otp", { email, otp: otpvalue });
+      const res = await axiosInstance.post("/auth/verify-otp", { email, otp: otpvalue });
       toast.success("Email verified! Welcome to PadhaiFlow 🎉");
+      login(res.data.token,res.data.user)
       navigate("/dashboard");
     } catch (error: any) {
       const message =

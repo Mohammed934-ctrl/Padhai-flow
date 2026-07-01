@@ -156,7 +156,7 @@ export const Login = async (req: Request, res: Response) => {
       password,
       existingUser.password,
     );
-  
+
     if (!isPasswordValid) {
       return res.status(400).json({ message: "please enter valid password " });
     }
@@ -176,10 +176,29 @@ export const Login = async (req: Request, res: Response) => {
         email: existingUser.email,
       },
     });
-
   } catch (error) {
     return res.status(500).json({
       message: "Failed to Login  ",
+      error: (error as Error).message,
+    });
+  }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    const token = req?.headers?.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(400).json({
+        message: "Token is required",
+      });
+    }
+    await redis.set(`blacklist:${token}`, "true", "EX", 60 * 60 * 24 * 7);
+    return res.status(200).json({
+      message: "Logout successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to logout",
       error: (error as Error).message,
     });
   }
